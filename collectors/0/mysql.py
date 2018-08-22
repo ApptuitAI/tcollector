@@ -124,7 +124,8 @@ def mysql_connect(conn_props):
     """Connects to the MySQL server using the specified connection properties."""
     return MySQLdb.connect(host=conn_props[0],
                            port=conn_props[1],
-                           user=conn_props[2], passwd=conn_props[3])
+                           user=conn_props[2].encode('utf-8'),
+                           passwd=conn_props[3].encode('utf-8'))
 
 
 def todict(db, row):
