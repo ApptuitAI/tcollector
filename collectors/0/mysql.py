@@ -120,12 +120,18 @@ class DB(object):
         self.cursor = self.db.cursor()
 
 
+def unicode_text(txt):
+    if not isinstance(txt, str):
+        return str(txt.encode('utf-8'))  # Python2
+    return txt # Python3
+
+
 def mysql_connect(conn_props):
     """Connects to the MySQL server using the specified connection properties."""
     return MySQLdb.connect(host=conn_props[0],
                            port=conn_props[1],
-                           user=conn_props[2].encode('utf-8'),
-                           passwd=conn_props[3].encode('utf-8'))
+                           user=unicode_text(conn_props[2]),
+                           passwd=unicode_text(conn_props[3]))
 
 
 def todict(db, row):
