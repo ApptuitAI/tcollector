@@ -95,14 +95,14 @@ mkdir -p %{buildroot}/%{py2_sitelib}/
 #%{tcollectordir}/collectors/etc/udp_bridge_conf.py
 #%{tcollectordir}/collectors/etc/zabbix_bridge_conf.py
 %{tcollectordir}/collectors/etc/udp_bridge_conf.py
-%{tcollectordir}/conf/grok.yml %config
-%{tcollectordir}/conf/grok_nginx.yml %config
-%{tcollectordir}/conf/grok_tomcat.yml %config
-%{tcollectordir}/conf/mysql.yml %config
-%{tcollectordir}/conf/memcached_metrics.yml %config
-%{tcollectordir}/conf/mysql_metrics.yml %config
-%{tcollectordir}/conf/node_metrics.yml %config
-%{tcollectordir}/conf/xcollector.yml %config
+%{tcollectordir}/conf/grok.yml %config(noreplace)
+%{tcollectordir}/conf/grok_nginx.yml %config(noreplace)
+%{tcollectordir}/conf/grok_tomcat.yml %config(noreplace)
+%{tcollectordir}/conf/mysql.yml %config(noreplace)
+%{tcollectordir}/conf/memcached_metrics.yml %config(noreplace)
+%{tcollectordir}/conf/mysql_metrics.yml %config(noreplace)
+%{tcollectordir}/conf/node_metrics.yml %config(noreplace)
+%{tcollectordir}/conf/xcollector.yml %config(noreplace)
 %{tcollectordir}/xcollector.py
 %{tcollectordir}/grok_scraper.py
 %{tcollectordir}/collectors/0/dfstat.py
@@ -142,7 +142,6 @@ if [ "$1" = "2" ]; then
 fi
 
 %post
-chkconfig --add xcollector
 if [ ! -L "/etc/xcollector" ]
 then
   ln -s %{tcollectordir}/conf /etc/xcollector
@@ -183,6 +182,9 @@ fi
 chown -R $XCOLLECTOR_USER.$XCOLLECTOR_GROUP /usr/local/xcollector
 chown -R $XCOLLECTOR_USER.$XCOLLECTOR_GROUP /var/run/xcollector
 chown -R $XCOLLECTOR_USER.$XCOLLECTOR_GROUP /var/log/xcollector
+
+chkconfig --add xcollector
+grep PASTE_ACCESS_TOKEN_HERE /etc/xcollector/xcollector.yml >/dev/null || service xcollector start
 
 %preun
 if [ "$1" = "0" ]; then

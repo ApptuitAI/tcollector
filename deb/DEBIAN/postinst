@@ -52,5 +52,7 @@ esac
 
 if [ -e "/etc/init.d/xcollector" ]; then
 	update-rc.d xcollector defaults 95 10 >/dev/null
+	#restart collector if an access token has been configured in the yml (we are upgrading the package)
+	grep PASTE_ACCESS_TOKEN_HERE /etc/xcollector/xcollector.yml >/dev/null || invoke-rc.d xcollector start
 fi
 
